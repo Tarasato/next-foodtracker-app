@@ -27,7 +27,7 @@ export default function Page() {
     event.preventDefault();
     console.log("Form submitted!");
   };
-  
+
   return (
     <main className="flex min-h-screen items-center justify-center p-4 bg-gradient-to-br from-teal-400 to-blue-600">
       <div className="relative w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
@@ -43,10 +43,18 @@ export default function Page() {
           <div className="flex flex-col items-center space-y-3">
             <div className="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
               {previewImage ? (
-                <Image src={previewImage} alt="Profile preview" className="w-full h-full object-cover" />
+                <div className="relative w-32 h-32">
+                  <Image
+                    src={previewImage}
+                    alt="Profile preview"
+                    fill
+                    className="object-cover rounded-full"
+                  />
+                </div>
               ) : (
                 <User size={48} className="text-gray-400" />
               )}
+
             </div>
             <input
               type="file"
