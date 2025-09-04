@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from 'next/image';
 import { ArrowLeft, User, Image as ImageIcon, Trash2 } from 'lucide-react';
 
-export default function RegisterPage() {
+export default function Page() {
 
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
