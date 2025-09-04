@@ -31,6 +31,11 @@ export default function RootLayout({
         className={`${prompt.className}`}
       >
         {children}
+        <p className="fixed bottom-0 left-0 w-full text-center py-[10px] text-xl md:text-2xl text-white opacity-90 bg-black/20">
+          Created by Tarasato
+          <br />
+          Copyright &copy; 2025 Southeast Asia University
+        </p>
       </body>
     </html>
   );

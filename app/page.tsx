@@ -44,12 +44,6 @@ export default function Home() {
             Login
           </Link>
         </div>
-        <p className="fixed bottom-0 left-0 w-full text-center py-4 text-xl md:text-2xl text-white opacity-90 bg-black/20">
-          Created by Tarasato
-          <br />
-          Copyright &copy; 2025 Southeast Asia University
-        </p>
-
       </div>
     </main>
   );
