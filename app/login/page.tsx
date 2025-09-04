@@ -1,22 +1,24 @@
-// file: app/login/page.tsx
-
 'use client';
 
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+
+  const router = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleLoginClick = (event: FormEvent) => {
     event.preventDefault();
-    // เพิ่ม Logic การส่งข้อมูล Login ไปยัง API ที่นี่
-    console.log("Login form submitted!");
+    
+    router.push('/dashboard');
   };
 
   return (
@@ -33,7 +35,7 @@ export default function LoginPage() {
           <p className="text-gray-500 mt-2">Sign in to continue</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+        <form onSubmit={handleLoginClick} className="mt-8 space-y-5">
           {/* Email Input */}
           <div>
             <label className="text-sm font-medium text-gray-700">Email</label>
