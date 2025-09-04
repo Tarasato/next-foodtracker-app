@@ -22,7 +22,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center p-4 bg-gradient-to-br from-purple-500 to-indigo-600">
+    <main className="flex min-h-screen items-center justify-center p-4">
       <div className="relative w-full max-w-sm bg-white rounded-2xl shadow-xl p-8">
 
         {/* Back to Home Button */}

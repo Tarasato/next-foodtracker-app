@@ -27,16 +27,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${prompt.className}`}
-      >
-        {children}
-        <p className="fixed bottom-0 left-0 w-full text-center py-[10px] text-xl md:text-2xl text-white opacity-90 bg-black/20">
+      <body className={`${prompt.className} flex flex-col min-h-screen bg-gradient-to-br from-green-400 via-blue-500 to-purple-600`}>
+        <main className="flex-grow">
+          {children}
+        </main>
+        <footer className="sticky bottom-0 text-center py-[10px] text-xl md:text-2xl text-white opacity-90 bg-gradient-to-t from-black/60 to-transparent">
           Created by Tarasato
           <br />
           Copyright &copy; 2025 Southeast Asia University
-        </p>
+        </footer>
+
       </body>
     </html>
   );
+
 }

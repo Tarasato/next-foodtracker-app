@@ -4,7 +4,7 @@ import foodbanner from './images/foodbanner.jpg'
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-gradient-to-br from-green-400 via-blue-500 to-purple-600">
+    <main className="flex min-h-screen flex-col items-center justify-center p-8">
       <div className="text-center">
 
         {/* Main Heading */}

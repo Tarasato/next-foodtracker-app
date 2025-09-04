@@ -38,7 +38,7 @@ export default function Page() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center p-4 bg-gradient-to-br from-teal-400 to-blue-600">
+    <main className="flex min-h-screen items-center justify-center p-4">
       <div className="relative w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
 
         <Link href="/" className="absolute top-4 left-4 text-gray-500 hover:text-gray-800 transition-colors" aria-label="Back to Home">
