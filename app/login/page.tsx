@@ -2,23 +2,34 @@
 
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { ArrowLeft, Mail, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function LoginPage() {
 
   const router = useRouter();
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  const handleLoginClick = async (event: FormEvent) => {
+  event.preventDefault();
 
-  const handleLoginClick = (event: FormEvent) => {
-    event.preventDefault();
-    
-    router.push('/dashboard');
+  const { data, error } = await supabase
+  .from('user_tb')
+  .select('*')
+  .eq('email', email)
+  .eq('password', password);
+
+  if (error) {
+    console.log("Login error:", error.message);
+    return;
+  }
+
+  // console.log("Login success:", data[0]);
+  localStorage.setItem("userInfo", JSON.stringify(data[0]));
+  router.push("/dashboard");
   };
 
   return (
@@ -43,11 +54,13 @@ export default function LoginPage() {
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <Mail className="h-5 w-5 text-gray-400" />
               </div>
-              <input 
-                type="email" 
-                required 
-                className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" 
-                placeholder="you@example.com" 
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                placeholder="you@example.com"
               />
             </div>
           </div>
@@ -60,19 +73,13 @@ export default function LoginPage() {
                 <Lock className="h-5 w-5 text-gray-400" />
               </div>
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 className="w-full p-3 pl-10 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                 placeholder="••••••••"
               />
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-              </button>
             </div>
           </div>
 
