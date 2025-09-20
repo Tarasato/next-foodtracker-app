@@ -95,16 +95,38 @@ export default function Page() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this item?')) return;
 
+    // หา food ก่อนลบ
+    const food = foods.find(f => f.id === id);
+
+    if (food?.food_image_url) {
+      // ดึงเฉพาะ path หลัง food_bk/
+      const imagePath = food.food_image_url.split('/food_bk/')[1];
+
+      if (imagePath) {
+        const { error: storageError } = await supabase
+          .storage
+          .from('food_bk')
+          .remove([imagePath]);
+        if (storageError) {
+          console.error('Error deleting image:', storageError);
+        }
+      }
+    }
+
+    // ลบข้อมูลจากตาราง
     const { error } = await supabase
       .from('food_tb')
       .delete()
       .eq('id', id);
+
     if (error) {
       console.error('Error deleting food:', error);
     } else {
       setFoods(prevFoods => prevFoods.filter(food => food.id !== id));
     }
   };
+
+
 
   return (
     <main className="min-h-screen p-4 sm:p-8">
