@@ -79,75 +79,78 @@ export default function Page() {
   };
 
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  e.preventDefault();
+  setLoading(true);
 
-    // ใน handleSubmit
-    let finalImageUrl = oldImageUrl;
+  // เช็คว่ารหัสผ่านตรงกันไหม
+  if (formData.newPassword && formData.newPassword !== formData.confirmNewPassword) {
+    alert("รหัสผ่านใหม่และยืนยันรหัสผ่านไม่ตรงกัน!");
+    setLoading(false);
+    return;
+  }
 
-    // ถ้ามีการอัปโหลดรูปใหม่
-    if (fileInputRef.current?.files?.[0]) {
-      const file = fileInputRef.current.files[0];
-      const fileName = `${Date.now()}-${file.name}`;
+  let finalImageUrl = oldImageUrl;
 
-      // ลบรูปเก่าก่อน
-      if (oldImageUrl) {
-        const oldPath = oldImageUrl.split('/').pop();
-        await supabase.storage.from('user_bk').remove([oldPath!]);
-      }
+  // ... ส่วนอัปโหลดรูปเหมือนเดิม
+  if (fileInputRef.current?.files?.[0]) {
+    const file = fileInputRef.current.files[0];
+    const fileName = `${Date.now()}-${file.name}`;
 
-      // อัปโหลดรูปใหม่
-      const { error: uploadError } = await supabase.storage.from('user_bk').upload(fileName, file);
-      if (uploadError) {
-        alert("อัปโหลดรูปไม่สำเร็จ!");
-        setLoading(false);
-        return;
-      }
-
-      const { data } = supabase.storage.from('user_bk').getPublicUrl(fileName);
-      finalImageUrl = data.publicUrl;
+    if (oldImageUrl) {
+      const oldPath = oldImageUrl.split('/').pop();
+      await supabase.storage.from('user_bk').remove([oldPath!]);
     }
 
-    // ถ้าลบรูปและไม่มีรูปใหม่
-    if (!previewImage && oldImageUrl) {
-      const oldPath = (oldImageUrl.split('/').pop() as string);
-      await supabase.storage.from('user_bk').remove([oldPath]);
-      finalImageUrl = null;
-    }
-
-    // อัปเดต DB
-    const { error } = await supabase
-      .from('user_tb')
-      .update({
-        fullname: formData.fullname,
-        email: formData.email,
-        user_image_url: finalImageUrl,
-        ...(formData.newPassword ? { password: formData.newPassword } : {}),
-      })
-      .eq('id', userId);
-
-
-    if (error) {
-      console.error(error);
-      alert("อัปเดตโปรไฟล์ไม่สำเร็จ!");
+    const { error: uploadError } = await supabase.storage.from('user_bk').upload(fileName, file);
+    if (uploadError) {
+      alert("อัปโหลดรูปไม่สำเร็จ!");
       setLoading(false);
       return;
     }
 
-    // อัปเดต localStorage
-    const { data: updatedUser } = await supabase
-      .from('user_tb')
-      .select('id, fullname, email, user_image_url')
-      .eq('id', userId)
-      .single();
+    const { data } = supabase.storage.from('user_bk').getPublicUrl(fileName);
+    finalImageUrl = data.publicUrl;
+  }
 
-    localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+  if (!previewImage && oldImageUrl) {
+    const oldPath = oldImageUrl.split('/').pop()!;
+    await supabase.storage.from('user_bk').remove([oldPath]);
+    finalImageUrl = null;
+  }
 
-    alert("อัปเดตโปรไฟล์สำเร็จ!");
-    setOldImageUrl(finalImageUrl);
+  // อัปเดต DB
+  const { error } = await supabase
+    .from('user_tb')
+    .update({
+      fullname: formData.fullname,
+      email: formData.email,
+      user_image_url: finalImageUrl,
+      ...(formData.newPassword ? { password: formData.newPassword } : {}),
+    })
+    .eq('id', userId);
+
+  if (error) {
+    console.error(error);
+    alert("อัปเดตโปรไฟล์ไม่สำเร็จ!");
     setLoading(false);
-    router.push("/dashboard");
-  };
+    return;
+  }
+
+  // อัปเดต localStorage
+  const { data: updatedUser } = await supabase
+    .from('user_tb')
+    .select('id, fullname, email, user_image_url')
+    .eq('id', userId)
+    .single();
+
+  localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+
+  alert("อัปเดตโปรไฟล์สำเร็จ!");
+  setOldImageUrl(finalImageUrl);
+  setLoading(false);
+  router.push("/dashboard");
+};
+
 
   return (
     <main className="flex min-h-screen items-center justify-center p-4">
