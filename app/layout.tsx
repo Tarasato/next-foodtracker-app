@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${prompt.className} flex flex-col min-h-screen bg-gradient-to-br from-green-400 via-blue-500 to-purple-600`}>
+      <body className={`${prompt.className} flex flex-col min-h-screen bg-gradient-to-br from-green-400 via-blue-500 to-purple-600 overflow-hidden`}>
         <main className="flex-grow">
           {children}
         </main>

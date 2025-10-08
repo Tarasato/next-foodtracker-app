@@ -14,23 +14,30 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
 
   const handleLoginClick = async (event: FormEvent) => {
-  event.preventDefault();
+    event.preventDefault();
 
-  const { data, error } = await supabase
-  .from('user_tb')
-  .select('*')
-  .eq('email', email)
-  .eq('password', password);
+    const { data, error } = await supabase
+      .from('user_tb')
+      .select('*')
+      .eq('email', email)
+      .eq('password', password); // ⚠️ การเก็บรหัสแบบ plaintext ไม่ปลอดภัย แนะนำใช้ hash
 
-  if (error) {
-    console.log("Login error:", error.message);
-    return;
-  }
+    if (error) {
+      console.log("Login error:", error.message);
+      alert("เกิดข้อผิดพลาดในการเข้าสู่ระบบ!");
+      return;
+    }
 
-  // console.log("Login success:", data[0]);
-  localStorage.setItem("userInfo", JSON.stringify(data[0]));
-  router.push("/dashboard");
+    if (!data || data.length === 0) {
+      alert("อีเมลหรือรหัสผ่านไม่ถูกต้อง!");
+      return;
+    }
+
+    // ถ้าถูกต้อง
+    localStorage.setItem("userInfo", JSON.stringify(data[0]));
+    router.push("/dashboard");
   };
+
 
   return (
     <main className="flex min-h-screen items-center justify-center p-4">

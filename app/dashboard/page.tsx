@@ -137,17 +137,23 @@ export default function Page() {
           <span className="hidden sm:inline">Home</span>
         </Link>
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center">My Food Diary</h1>
-        <div className="flex items-center gap-3">
-          <Link href="/profile" className="hidden sm:inline font-semibold text-gray-700">{fullname}</Link>
-          <Image
-            src={user_image_url || profile}
-            alt="User profile picture"
-            width={40}
-            height={40}
-            style={{ width: 'auto', height: 'auto' }}
-            className="rounded-full"
-          />
+        <div className="flex items-center gap-2">
+          <Link href="/profile" className="hidden sm:inline font-semibold text-gray-700">
+            {fullname}
+          </Link>
+          <Link href="/profile">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 relative rounded-full overflow-hidden">
+              <Image
+                src={user_image_url || profile}
+                alt="User profile picture"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </Link>
         </div>
+
+
       </div>
 
       <div className="max-w-7xl mx-auto bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6">
